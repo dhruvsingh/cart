@@ -138,4 +138,9 @@ class Cart(Base):
         product_status = get_offers(cart, offers)
         apply_discounts(product_status, cart)
 
+        print(
+            '{products} are in cart.'.format(
+                products=', '.join([product.name for product in cart.products])
+            )
+        )
         print('Cart total is ${total}'.format(total=round(cart.total, 2)))

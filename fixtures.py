@@ -13,7 +13,7 @@ oatmeal = Product(code='OM1', name='Oatmeal', price=3.69)
 # products = [coffee, coffee]
 # products = [coffee]
 # products = [apple, apple, chai, apple]
-# products = [apple, apple, apple, apple, apple, oatmeal, oatmeal, milk, chai]
+products = [apple, apple, apple, apple, apple, oatmeal, oatmeal, milk, chai]
 # products = [chai, apple, apple, apple, milk, oatmeal]
 # products = [apple, apple, apple]
 
