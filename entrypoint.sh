@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/sh
+
 if [[ $1 == "help" ]]; then
     echo "
     Usage:
