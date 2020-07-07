@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 def apply_discounts(product_status, cart):
+    """Apply discounts on cart per the products that it contains."""
 
     for product, product_offer in product_status.items():
         product_offers = product_offer['offers']
@@ -33,9 +34,8 @@ def apply_discounts(product_status, cart):
             cart.total = min(prices_list)
 
 
-
 def get_offers_for_product(product, offers):
-    """If any of the product or dependent is current product, then offer is available"""
+    """Accumulate all offers applicable for a product."""
     applicable_offers = set()
 
     for offer in offers:
@@ -47,7 +47,7 @@ def get_offers_for_product(product, offers):
 
 def get_offers(cart, offers):
     """
-    Build a key, value
+    Build a key, value store with product quantity, and applicable offers.
     """
     product_status = {}
 
@@ -59,8 +59,8 @@ def get_offers(cart, offers):
             product_status[product.name]['offers'].update(product_offers)
         except KeyError:
             product_status[product.name] = {
-                'quantity': 1, 'offers': product_offers,
-                'product': product
+                'quantity': 1,
+                'offers': product_offers,
             }
 
     return product_status
@@ -75,13 +75,13 @@ class Base(object):
 
 class Product(Base):
     """
-    Holds information about a unique product; price and name for now.
+    Holds information about a unique product; code, price and name for now.
 
-    Can be extended using Variant class to hold multiple variants for a product.
+    Can be extended using Variant class to have multiple variants for a product.
     """
 
     def __init__(self, code: str, name: str, price: float, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.code = code
         self.name = name
         self.price = price
@@ -98,8 +98,8 @@ class Offer(Base):
     """
 
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__()
-        self.__dict__.update(kwargs)
+        super().__init__()
+        self.__dict__.update(**kwargs)
 
     def __repr__(self):
         return f'{self.name}'
@@ -113,7 +113,7 @@ class Cart(Base):
     """
 
     def __init__(self, products: [Product], *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.products = products
         self.total = 0.0
 
@@ -128,9 +128,7 @@ class Cart(Base):
     @staticmethod
     def calculate_total(cart, offers):
         """
-        Calculate cart total.
-
-        Apply discounts too.
+        Calculate cart total with available offers.
         """
         for product in cart.products:
             cart.total += product.price

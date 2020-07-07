@@ -7,15 +7,6 @@ coffee = Product(code='CF1', name='Coffee', price=11.23)
 milk = Product(code='MK1', name='Milk', price=4.75)
 oatmeal = Product(code='OM1', name='Oatmeal', price=3.69)
 
-# products = [chai, apple, apple, apple, milk]
-# products = [chai, apple, coffee, milk]
-# products = [milk, apple]
-# products = [coffee, coffee]
-# products = [coffee]
-# products = [apple, apple, chai, apple]
-products = [apple, apple, apple, apple, apple, oatmeal, oatmeal, milk, chai]
-# products = [chai, apple, apple, apple, milk, oatmeal]
-# products = [apple, apple, apple]
 
 offers = [
     Offer(**{
