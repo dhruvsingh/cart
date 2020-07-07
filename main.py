@@ -15,7 +15,7 @@ from fixtures import (
 @click.command()
 @click.option("--products", help="Share your products.")
 def test_cart(products):
-    print('received products are {0}'.format(products))
+    print('Received products are {0}'.format(products))
     try:
         products = products.split(',')
         products = [eval(product) for product in products]
