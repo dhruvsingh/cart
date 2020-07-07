@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+from typing import List
+from decimal import Decimal
+
+
 def apply_discounts(product_status, cart):
     """Apply discounts on cart per the products that it contains."""
 
@@ -8,6 +12,7 @@ def apply_discounts(product_status, cart):
 
         for offer in product_offers:
             cart_total = cart.total
+            offer_limit = offer.limit or True
             if (
                     offer.dependent.name in product_status
                     and offer.product.name in product_status
@@ -16,10 +21,13 @@ def apply_discounts(product_status, cart):
                 while (
                     product_status[offer.product.name]['quantity'] >= offer.order_quantity
                     and product_status[offer.dependent.name]['quantity'] > 0
-                    and (not offer.limit or offer.limit > 0)
+                    and offer_limit > 0
                 ):
                     if offer.condition != '>=':
                         product_status[offer.dependent.name]['quantity'] -= 1
+
+                    if isinstance(offer_limit, int):
+                        offer_limit -= 1
 
                     product_status[offer.product.name]['quantity'] -= offer.order_quantity
 
@@ -81,7 +89,6 @@ class Product(Base):
     """
 
     def __init__(self, code: str, name: str, price: float, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.code = code
         self.name = name
         self.price = price
@@ -98,7 +105,6 @@ class Offer(Base):
     """
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
         self.__dict__.update(**kwargs)
 
     def __repr__(self):
@@ -112,10 +118,10 @@ class Cart(Base):
     Holds information about products; price and name for now.
     """
 
-    def __init__(self, products: [Product], *args, **kwargs):
+    def __init__(self, products: List[Product], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.products = products
-        self.total = 0.0
+        self.total = Decimal(0.0)
 
     def add_product(self, product: Product):
         # add product to the cart and calculate current cart status?
@@ -137,8 +143,6 @@ class Cart(Base):
         apply_discounts(product_status, cart)
 
         print(
-            '{products} are in cart.'.format(
-                products=', '.join([product.name for product in cart.products])
-            )
+            f"{', '.join([product.name for product in cart.products])} are in cart."
         )
-        print('Cart total is ${total}'.format(total=round(cart.total, 2)))
+        print(f'Cart total is ${round(cart.total, 2)}')
